@@ -1,0 +1,20 @@
+# Terraform downloaded files
+.terraform/
+
+# Terraform state and plans
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+
+# Local variables and secrets
+terraform.tfvars
+terraform.tfvars.json
+*.auto.tfvars
+*.auto.tfvars.json
+
+# Private SSH keys
+*.pem
+*.key
+terra-ec2-key
