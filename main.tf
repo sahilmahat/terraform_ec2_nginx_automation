@@ -81,7 +81,3 @@ resource "aws_ec2_instance_state" "my_ec2_insance_state" {
 
 
 
-resource "aws_instance" "my_new_instance" {
-  ami           = "ami-01a00762f46d584a1"
-  instance_type = "t3.micro"
-}
