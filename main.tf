@@ -52,18 +52,36 @@ resource "aws_security_group" "my_security_group" {
 }
 
 resource "aws_instance" "my_ec2_instance" {
-  ami             = var.ec2_ami_id
-  instance_type   = var.ec2_instance_type
+  ami = var.ec2_ami_id
+  for_each = tomap({
+    TWS_Junoon-automate-micro  = "t3.micro"
+    TWS_Junoon-automate-medium = "t3.small"
+  })
+
+  depends_on      = [aws_security_group.my_security_group]
+  instance_type   = each.value
   key_name        = aws_key_pair.my_key.key_name
   security_groups = [aws_security_group.my_security_group.name]
   user_data       = file("install.sh")
   root_block_device {
-    volume_size = var.ec2_root_storage
+    volume_size = var.env == "dev" ? 20 : var.ec2_default_root_storage
     volume_type = "gp3"
   }
 
   tags = {
-    Name = "Automated EC2 Instance"
+    Name = each.key
   }
 }
 
+resource "aws_ec2_instance_state" "my_ec2_insance_state" {
+  for_each    = aws_instance.my_ec2_instance
+  instance_id = each.value.id
+  state       = "running"
+}
+
+
+
+resource "aws_instance" "my_new_instance" {
+  ami           = "ami-01a00762f46d584a1"
+  instance_type = "t3.micro"
+}
